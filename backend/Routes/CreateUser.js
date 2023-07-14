@@ -32,7 +32,17 @@ router.post("/createuser",[
                     email:req.body.email,
                     location:req.body.location
                 });
-                res.json({success:true});
+                let email=req.body.email;
+                let userData=await User.findOne({email});
+
+                const data={
+                    user:{
+                        id:userData.id
+                    }
+                }
+
+                const authToken=jwt.sign(data,jwtSecret);
+                res.json({success:true,authToken:authToken});
             }
         }
         catch (error){
